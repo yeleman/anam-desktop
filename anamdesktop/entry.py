@@ -4,15 +4,22 @@
 
 import sys
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 
-from anamdesktop import setlocale
+from anamdesktop import setlocale, logger
 from anamdesktop.ui.main import MainWindow
 
 
-def main():
+def destroy():
+    logger.info("Exiting Application")
+    QtCore.QCoreApplication.instance().quit
+    sys.exit(0)
 
+
+def main():
+    logger.info("Starting Application")
     app = QtWidgets.QApplication(sys.argv)
+    app.lastWindowClosed.connect(destroy)
     setlocale()
     window = MainWindow()
     window.reset()

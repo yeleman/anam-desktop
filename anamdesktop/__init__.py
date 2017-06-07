@@ -13,6 +13,10 @@ IS_MAC = platform.system() == 'Darwin'
 UI_SIZE = (900, 600)
 SETTINGS_FILE = "anam-desktop.settings"
 
+VERSION = (0, 1)
+APP_NAME = "ANAM Desktop"
+DEVELOPER = "yɛlɛman"
+
 logging.config.dictConfig({
     'version': 1,
     'disable_existing_loggers': True,

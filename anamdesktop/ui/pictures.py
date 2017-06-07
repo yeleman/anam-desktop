@@ -79,10 +79,10 @@ class ImagesCopyDialog(CollectActionDialog):
     def select_source_dir(self, *args, **kwargs):
         ''' show folder picker and update `source_dir` and select_feedback '''
         fpath = str(QtWidgets.QFileDialog.getExistingDirectory(
-            self, "Choisir la racine de la clé USB"))
+            self, "Séléctionner le chemin de la clé USB"))
 
         # ensure selected folder as a `Dossiers` subfolder in it
-        self.source_dir = os.path.join(fpath, 'Dossiers') \
+        self.source_dir = "\\".join((fpath, 'Dossiers')) \
             if fpath and 'Dossiers' in os.listdir(fpath) else None
 
         # update button activeness

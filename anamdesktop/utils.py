@@ -9,7 +9,7 @@ import unicodedata
 
 import iso8601
 
-from anamdesktop import IS_MAC
+from anamdesktop import IS_MAC, VERSION
 
 # list of hamed-prepared attachments that we care about
 VALID_ATTACHMENTS = ('acte-naissance',
@@ -56,3 +56,7 @@ def open_log(fpath):
         subprocess.call(['open', fpath])
     else:
         os.startfile(fpath)
+
+
+def get_version():
+    return ".".join([str(i) for i in VERSION])
