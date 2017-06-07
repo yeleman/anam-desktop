@@ -88,6 +88,8 @@ class CollectActionDialog(QtWidgets.QDialog, CollectDialogInterface):
     def __init__(self, collect_id=None, dataset=None, *args, **kwargs):
 
         super().__init__(*args, **kwargs)
+        self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
+
         self.collect_id = None
         self.dataset = None
 

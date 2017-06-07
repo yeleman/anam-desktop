@@ -49,19 +49,26 @@ class HomeWidget(QtWidgets.QWidget):
         self.initUI()
 
     def initUI(self):
+        self.setSizePolicy(QtWidgets.QSizePolicy.Ignored,
+                           QtWidgets.QSizePolicy.Ignored)
         self.layout = QtWidgets.QVBoxLayout()
 
         self.collects = (do_get('/collects', or_none=True) or {}) \
             .get('collects')
 
         if self.get_collects() is not None:
-            content = self.create_table()
+            self.content = self.create_table()
         else:
-            content = ErrorLabel(
+            self.content = ErrorLabel(
                 "Impossible de récupérer les données.<br />"
                 "Vérifier les paramètres.")
 
-        self.layout.addWidget(content)
+        self.layout.addWidget(self.content)
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        if self.content:
+            self.content.resize(self.width(), self.height())
 
     @property
     def display_archived(self):

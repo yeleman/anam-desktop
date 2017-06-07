@@ -24,9 +24,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         logger.info("Starting Application")
-        self.widget = QtWidgets.QWidget()
-        self.setCentralWidget(self.widget)
-        self.page = None
+        self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.initUI()
 
     def initUI(self):
@@ -35,7 +33,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setWindowIcon(QtGui.QIcon(
             os.path.join('img', 'anam-desktop.png')))
 
-        menubar = QtWidgets.QMenuBar(self)
+        menubar = QtWidgets.QMenuBar(None if IS_MAC else self)
         file_menu = menubar.addMenu("&Fichier")
 
         log_menu = file_menu.addMenu("&Logs")
@@ -74,6 +72,7 @@ class MainWindow(QtWidgets.QMainWindow):
         file_menu.addAction(exit_action)
 
         self.setMenuBar(menubar)
+        self.setMenuWidget(menubar)
 
     def exit(self):
         logger.info("Exiting Application")
@@ -83,15 +82,12 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def reset(self):
         ''' displays a new instance of Home (thus refreshing its contents) '''
-        self.widget = QtWidgets.QWidget()
-        self.setCentralWidget(self.widget)
-        self.page = None
         self.displayHome()
 
     def switchPage(self, widget):
         ''' change content of the MainWindow to `widget` '''
-        self.page = widget
-        self.widget.setLayout(self.page.layout)
+        self.setCentralWidget(widget)
+        widget.resize(self.width(), self.height())
         self.show()
 
     def displayHome(self):
@@ -197,6 +193,3 @@ class MainWindow(QtWidgets.QMainWindow):
             logger.exception(exp)
         else:
             logger.info("Unarchived #{}".format(collect_id))
-
-    def resizeEvent(self, event):
-        super().resizeEvent(event)
