@@ -99,3 +99,15 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+oraclient
+oraclient_win64
+oraclient_macos
+dist
+build
+extras
+
+anam-desktop.settings
+*.spec
+*.log
+*.txt
