@@ -321,10 +321,11 @@ class ImagesCopyDialog(CollectActionDialog):
         if nb_errors:
             with open(self.error_log_fname, 'w') as f:
                 # initial statistics
-                f.write("Copie partielle des images de la collecte {id}.\n"
-                        "Date de la copie: {date}.\n"
-                        "Nb. images: {nbt}.\n"
-                        "Nb. erreurs: {nbe}.\n\n".format(
+                f.write("Copie partielle des images de la collecte {id}.{cr}"
+                        "Date de la copie: {date}.{cr}"
+                        "Nb. images: {nbt}.{cr}"
+                        "Nb. erreurs: {nbe}.{cr}{cr}".format(
+                            cr=os.linesep,
                             id=self.ona_form_id,
                             date=datetime.datetime.now().isoformat(),
                             nbt=self.nb_images,
@@ -332,7 +333,8 @@ class ImagesCopyDialog(CollectActionDialog):
 
                 # list of [REASON] source -> destination lines
                 for fpath, nfpath, error in error_list:
-                    f.write("[{e}] {s} ---> {d}\n".format(
+                    f.write("[{e}] {s} ---> {d}{cr}".format(
+                        cr=os.linesep,
                         e=COPY_ERROR_TYPES.get(error),
                         s=fpath, d=nfpath))
 
