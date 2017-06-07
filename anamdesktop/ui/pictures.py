@@ -82,7 +82,7 @@ class ImagesCopyDialog(CollectActionDialog):
             self, "Séléctionner le chemin de la clé USB"))
 
         # ensure selected folder as a `Dossiers` subfolder in it
-        self.source_dir = "\\".join((fpath, 'Dossiers')) \
+        self.source_dir = "/".join((fpath, 'Dossiers')) \
             if fpath and 'Dossiers' in os.listdir(fpath) else None
 
         # update button activeness
