@@ -3,13 +3,13 @@
 # vim: ai ts=4 sts=4 et sw=4 nu
 
 import os
-import sys
 import json
 import shutil
 
 from PyQt5 import QtWidgets, QtGui, QtCore
 
 from anamdesktop.network import do_post
+from anamdesktop.ui.table import QTable
 from anamdesktop.ui.home import HomeWidget
 from anamdesktop.ui.upload import UploadDialog
 from anamdesktop.ui.dbimport import ImportDialog
@@ -99,12 +99,13 @@ class MainWindow(QtWidgets.QMainWindow):
     def switchPage(self, widget):
         ''' change content of the MainWindow to `widget` '''
         self.setCentralWidget(widget)
-        widget.resize(self.width(), self.height())
+        if isinstance(widget, QTable):
+            widget.resize(self.width(), self.height())
         self.show()
 
     def displayHome(self):
         logger.info("Refreshing Home")
-        self.switchPage(HomeWidget(self))
+        self.switchPage(HomeWidget(self).content)
 
     def showAbout(self):
         QtWidgets.QMessageBox.information(

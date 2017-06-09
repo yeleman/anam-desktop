@@ -8,7 +8,7 @@ from anamdesktop.utils import isototext
 from anamdesktop.network import do_post
 from anamdesktop.dbimport import import_target
 from anamdesktop.ui.dialog import CollectActionDialog
-from anamdesktop.oracle import ora_autoconnect, ora_disconnect
+from anamdesktop.oracle import ora_connect, ora_disconnect, ora_test
 
 
 class ImportDialog(CollectActionDialog):
@@ -56,7 +56,8 @@ class ImportDialog(CollectActionDialog):
             rollback if any of this failed '''
 
         try:
-            conn = ora_autoconnect()
+            assert ora_test()
+            conn = ora_connect()
         except Exception as exp:
             logger.exception(exp)
             self.status_bar.set_error("Connexion impossible à la base Oracle. "

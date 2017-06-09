@@ -19,53 +19,53 @@ class FailedToCreateTree(Exception):
     pass
 
 
-def smb_connect(address=SETTINGS.get('picserv_ip'),
-                username=SETTINGS.get('picserv_username'),
-                password=SETTINGS.get('picserv_password')):
+def smb_connect(address=None, username=None, password=None):
     ''' prepare and return a valid SMB Connection object
 
         Uses global settings for unspecified parameters '''
 
-    conn = SMBConnection(username=username,
-                         password=password,
+    conn = SMBConnection(username=username or SETTINGS.get('picserv_username'),
+                         password=password or SETTINGS.get('picserv_password'),
                          my_name="ANAM-DESKTOP",
                          remote_name="")
-    assert conn.connect(address, 139)
+    assert conn.connect(address or SETTINGS.get('picserv_ip'), 139)
     return conn
 
 
-def create_folder(path, service_name=SETTINGS.get('picserv_share'), conn=None):
+def create_folder(path, service_name=None, conn=None):
     ''' create a folder at `path` on the SMB share `service_name` '''
-    if conn is None:
-        conn = smb_connect()
 
-    conn.createDirectory(service_name=service_name, path=path)
+    conn = conn or smb_connect()
+    conn.createDirectory(
+        service_name=service_name or SETTINGS.get('picserv_share'), path=path)
 
 
-def delete_folder(path, service_name=SETTINGS.get('picserv_share'), conn=None):
+def delete_folder(path, service_name=None, conn=None):
     ''' delete a folder at `path` on the SMB share `service_name` '''
 
-    if conn is None:
-        conn = smb_connect()
+    conn = conn or smb_connect()
+    conn.deleteDirectory(
+        service_name=service_name or SETTINGS.get('picserv_share'), path=path)
 
-    conn.deleteDirectory(service_name=service_name, path=path)
 
-
-def delete_file(path, service_name=SETTINGS.get('picserv_share'), conn=None):
+def delete_file(path, service_name=None, conn=None):
     ''' delete a file at `path` on the SMB share `service_name` '''
 
-    if conn is None:
-        conn = smb_connect()
+    conn = conn or smb_connect()
+    conn.deleteFiles(
+        service_name=service_name or SETTINGS.get('picserv_share'),
+        path_file_pattern=path)
 
-    conn.deleteFiles(service_name=service_name, path_file_pattern=path)
 
-
-def copy_files(files, service_name=SETTINGS.get('picserv_share'), conn=None):
+def copy_files(files, service_name=None, conn=None):
     ''' copy a list of files to `service_name`
 
         files is a list of (source_path, destitionation_path) tuples
 
         returns (success, [list, of, failures]) '''
+
+    conn = conn or smb_connect()
+    service_name = service_name or SETTINGS.get('picserv_share')
 
     def _create_folder(service_name, path):
         try:
@@ -94,9 +94,6 @@ def copy_files(files, service_name=SETTINGS.get('picserv_share'), conn=None):
             path = os.path.join(*walked_folders)
 
             _create_folder(service_name, path)
-
-    if conn is None:
-        conn = smb_connect()
 
     failures = []
 
@@ -129,11 +126,14 @@ def copy_files(files, service_name=SETTINGS.get('picserv_share'), conn=None):
     return not failures, failures
 
 
-def test_connection(address=SETTINGS.get('picserv_ip'),
-                    username=SETTINGS.get('picserv_username'),
-                    password=SETTINGS.get('picserv_password'),
-                    service_name=SETTINGS.get('picserv_share')):
+def test_connection(address=None, username=None, password=None,
+                    service_name=None):
     ''' test whether an SMB share is writable '''
+
+    address = address or SETTINGS.get('picserv_ip')
+    username = username or SETTINGS.get('picserv_username')
+    password = password or SETTINGS.get('picserv_password')
+    service_name = service_name or SETTINGS.get('picserv_share')
 
     # test whether server is reachable and has a samba service
     if not test_socket(address, SAMBA_PORT):
@@ -141,8 +141,7 @@ def test_connection(address=SETTINGS.get('picserv_ip'),
 
     try:
         conn = smb_connect(address=address,
-                           username=username,
-                           password=password)
+                           username=username, password=password)
     except:
         return False
 

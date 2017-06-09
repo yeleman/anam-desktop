@@ -99,7 +99,7 @@ class ImagesCopyDialog(CollectActionDialog):
         open_log(self.error_log_fname)
 
     def get_action_btn_label(self):
-        return "importer {} indigents".format(self.nb_indigents)
+        return "Copier {} images sur le partage".format(self.nb_images)
 
     def get_progress_maximum(self):
         return self.nb_indigents
@@ -247,12 +247,16 @@ class ImagesCopyDialog(CollectActionDialog):
                 "Vérifiez la source et recommencez.")
             return
 
+        self.status_bar.setText("Connexion au partage…")
+
         # ensure destination is ready to fail early if not
         if not test_connection():
             self.status_bar.set_error(
                 "Impossible d'écrire sur le partage.\n"
                 "Vérifiez les paramètres et recommencez.")
             return
+
+        self.status_bar.setText("Connecté au partage.")
 
         # start file copies from copy list
         for index, copy_data in enumerate(copy_list.values()):

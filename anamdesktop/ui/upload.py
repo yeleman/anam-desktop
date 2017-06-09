@@ -7,9 +7,9 @@ import datetime
 
 from anamdesktop import logger
 from anamdesktop.ui.common import NA
-from anamdesktop.network import do_post
 from anamdesktop.utils import datetotext
 from anamdesktop.ui.dialog import CollectActionDialog
+from anamdesktop.network import do_post, test_webservice
 
 
 class UploadDialog(CollectActionDialog):
@@ -51,6 +51,15 @@ class UploadDialog(CollectActionDialog):
 
     def worker(self):
         ''' upload (POST) dataset to anam-receiver '''
+
+        try:
+            assert test_webservice()
+        except Exception as exp:
+            logger.exception(exp)
+            self.status_bar.set_error(
+                "Connexion impossible au service anam-receiver. "
+                "Vérifiez les paramètres.")
+            return
 
         try:
             do_post("/upload/", payload=self.dataset)

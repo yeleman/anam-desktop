@@ -5,8 +5,8 @@
 from PyQt5 import QtWidgets, QtCore
 
 from anamdesktop.samba import test_connection
-from anamdesktop.oracle import ora_connect, ORACLE_PORT
 from anamdesktop.network import test_socket, test_webservice
+from anamdesktop.oracle import ora_connect, ora_test, ORACLE_PORT
 from anamdesktop import SETTINGS, logger, save_settings, SETTINGS_FILE
 
 
@@ -119,11 +119,16 @@ class OracleChecker(SettingsGroupChecker):
                            port=ORACLE_PORT):
             return False
         try:
-            return test_conn()
+            assert ora_test(address=self.getfield('db_serverip').text(),
+                            username=self.getfield('db_username').text(),
+                            password=self.getfield('db_password').text(),
+                            service=self.getfield('db_sid').text())
         except Exception as e:
             logger.debug("Unable to connect to oracle database.")
             logger.debug(e)
             return False
+        else:
+            return True
 
 
 class WebAPIChecker(SettingsGroupChecker):

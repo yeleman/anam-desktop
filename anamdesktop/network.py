@@ -10,27 +10,23 @@ import requests
 from anamdesktop import SETTINGS, logger
 
 
-def get_auth_headers(token=SETTINGS.get('store_token')):
+def get_auth_headers(token=None):
     ''' `authorization header (dict) for `requests` using `token` '''
-    return {'Authorization': "Token {}".format(token)}
+    return {'Authorization': "Token {}".format(
+        token or SETTINGS.get('store_token'))}
 
 
-def do_get(path,
-           or_none=False,
-           server_url=SETTINGS.get('store_url', ''),
-           server_token=SETTINGS.get('store_token')):
+def do_get(path, or_none=False, server_url=None, server_token=None):
     ''' performs GET request on API.
 
         see. `do_request()` '''
-    return do_request(path, 'GET',
+    return do_request(path=path, method='GET',
                       or_none=or_none,
                       server_url=server_url, server_token=server_token)
 
 
-def do_post(path, payload=None,
-            or_none=False,
-            server_url=SETTINGS.get('store_url', ''),
-            server_token=SETTINGS.get('store_token')):
+def do_post(path, payload=None, or_none=False,
+            server_url=None, server_token=None):
     ''' performs POST request with `payload` on API.
 
         see. `do_request()` '''
@@ -39,10 +35,8 @@ def do_post(path, payload=None,
                       server_url=server_url, server_token=server_token)
 
 
-def do_request(path, method, kwargs={},
-               or_none=False,
-               server_url=SETTINGS.get('store_url', ''),
-               server_token=SETTINGS.get('store_token')):
+def do_request(path, method, kwargs={}, or_none=False,
+               server_url=None, server_token=None):
     ''' performs a GET or POST on `path`
 
         URL is computed from `server_url`, /api and `path`
@@ -52,6 +46,10 @@ def do_request(path, method, kwargs={},
         Raises on non-success status response.
 
         returns response as JSON '''
+
+    server_url = server_url or SETTINGS.get('store_url', '')
+    server_token = server_token or SETTINGS.get('store_token')
+
     url = ''.join((server_url, '/api', path))
 
     if not test_url_socket(url):
@@ -91,9 +89,10 @@ def test_socket(address, port):
     return result == 0
 
 
-def test_url_socket(url):
+def test_url_socket(url=None):
+    ''' shortcut to test if socket is opened from a URL '''
     try:
-        u = urllib.parse.urlparse(url)
+        u = urllib.parse.urlparse(url or SETTINGS.get('store_url'))
     except Exception as exp:
         logger.error("Unable to parse URL `{}`".format(url))
         logger.exception(exp)
@@ -103,7 +102,8 @@ def test_url_socket(url):
     return test_socket(u.hostname, u.port)
 
 
-def test_webservice(url, token):
+def test_webservice(url=None, token=None):
+    ''' tests whether the actual anam-receiver is responding '''
     if not test_url_socket(url):
         return False
 

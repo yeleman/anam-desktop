@@ -12,6 +12,7 @@ class ErrorLabel(QtWidgets.QLabel):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
         font = QtGui.QFont()
         font.setBold(True)
         self.setFont(font)
