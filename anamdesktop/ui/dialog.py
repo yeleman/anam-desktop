@@ -19,7 +19,7 @@ class ActionDialogButton(QtWidgets.QPushButton):
         self.clicked.connect(self.on_click)
 
     def on_click(self):
-        mainw = self.parent().parent().parent().parent()
+        mainw = self.parent().parent().parent()
         getattr(mainw, self.method)(self.collect_id)
 
 
