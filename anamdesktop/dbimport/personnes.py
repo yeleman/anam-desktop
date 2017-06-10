@@ -12,8 +12,8 @@ from anamdesktop.locations import (get_asserted_commune_id,
 
 
 def create_hh_member(conn, dos_id, member_data, target, ind_id=None):
-    ''' insert an IM_PERSONNES into ANAM DB '''
-    stmt = ("INSERT INTO ANAM.IM_PERSONNES ("
+    ''' insert an IM_PERSONNES_mobile into ANAM DB '''
+    stmt = ("INSERT INTO ANAM.IM_PERSONNES_mobile ("
             "OGD_ID, DOS_ID,"
             "PERSO_CIVILITE, PERSO_NOM, PERSO_PRENOM, PERSO_SEXE, "
             "PERSO_DATE_NAISSANCE, PERSO_LOCALITE_NAISSANCE, "

@@ -28,9 +28,9 @@ def request_dos_id(conn):
 
 
 def create_dossier(conn, ident, target):
-    ''' insert an IM_DOSSIERS into DB and returns its DOS_ID '''
+    ''' insert an IM_DOSSIERS_mobile into DB and returns its DOS_ID '''
 
-    stmt = ("INSERT INTO ANAM.IM_DOSSIERS ("
+    stmt = ("INSERT INTO ANAM.IM_DOSSIERS_mobile ("
             "DOS_ID, DOS_DATE, DOS_STATUT, "
             "TYDO_ID, OGD_ID, "
             "DOS_CREE_PAR, DOS_DATE_CREATION, DOS_IMPUTATION, "

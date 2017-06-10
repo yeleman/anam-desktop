@@ -13,7 +13,7 @@ IS_MAC = platform.system() == 'Darwin'
 UI_SIZE = (900, 600)
 SETTINGS_FILE = "anam-desktop.settings"
 
-VERSION = (0, 1)
+VERSION = (1, 0)
 APP_NAME = "ANAM Desktop"
 DEVELOPER = "yɛlɛman"
 
