@@ -2,13 +2,29 @@
 # -*- coding: utf-8 -*-
 # vim: ai ts=4 sts=4 et sw=4 nu
 
-import random
 import datetime
 
-import cx_Oracle
-
 from anamdesktop.locations import get_asserted_commune_id
-from anamdesktop.dbimport import cl, mx, ANAMDB_USER_ID, ANAMDB_SHORTDATE_FMT
+from anamdesktop.dbimport import cl, mx, ANAMDB_USER_ID
+
+
+def request_dos_id(conn):
+    stmt = ("SELECT LPAD(ANAM.SQ_DAY_DOSS.NEXTVAL, 4, '0') || '-' || "
+            "LPAD(TO_CHAR (SYSDATE, 'FMDD'), 2, '0') || "
+            "LPAD(TO_CHAR (SYSDATE, 'FMMM'), 2, '0') || "
+            "TO_CHAR (SYSDATE, 'FMRRRR') INTO :gen_dos_id FROM DUAL")
+
+    cursor = conn.cursor()
+    gen_dos_id = None
+    try:
+        cursor.execute(stmt)
+        gen_dos_id = cursor.fetchone()[-1]
+    except:
+        raise
+    finally:
+        cursor.close()
+
+    return gen_dos_id
 
 
 def create_dossier(conn, ident, target):
@@ -24,15 +40,12 @@ def create_dossier(conn, ident, target):
             ":tydo_id, :ogd_id, "
             ":dos_cree_par, :dos_date_creation, :dos_imputation, "
             ":loc_code, :dos_perso_nom, :dos_perso_prenom, :dos_certif_ind, "
-            ":dos_type_saisie, :opv_code) returning DOS_ID into :gen_dos_id")
+            ":dos_type_saisie, :opv_code)")
 
     now = datetime.datetime.now()
     today = datetime.datetime(*now.timetuple()[:3])
 
-    # TODO: replace with appropriate generated value
-    incr = random.randint(1, 10000)
-    dos_id = "{incr}-{date}".format(incr=incr,
-                                    date=now.strftime(ANAMDB_SHORTDATE_FMT))
+    dos_id = request_dos_id(conn)
 
     certif_ind = "N°CI_{dos_id}".format(dos_id=dos_id)
 
@@ -61,15 +74,11 @@ def create_dossier(conn, ident, target):
     }
 
     cursor = conn.cursor()
-    gen_dos_id = None
-    gen_dos_id_var = cursor.var(cx_Oracle.STRING)
-    payload.update({'gen_dos_id': gen_dos_id_var})
     try:
         cursor.execute(stmt, payload)
-        gen_dos_id = gen_dos_id_var.getvalue()
     except:
         raise
     finally:
         cursor.close()
 
-    return gen_dos_id
+    return dos_id
