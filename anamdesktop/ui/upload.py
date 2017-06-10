@@ -65,11 +65,11 @@ class UploadDialog(CollectActionDialog):
             do_post("/upload/", payload=self.dataset)
         except Exception as exp:
             logger.exception(exp)
+            self.progress_bar.maximum()
             self.status_bar.set_error(
                 "Échec de la transmission manuelle.\n"
                 "Vérifiez le fichier, le réseau et recommencez.")
         else:
+            self.progress_bar.maximum()
             self.status_bar.set_success(
                 "Transmission manuelle terminée avec succès.")
-        finally:
-            self.progress_bar.setValue(self.progress_bar.maximum())

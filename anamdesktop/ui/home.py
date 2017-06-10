@@ -6,10 +6,8 @@ from collections import OrderedDict
 
 from PyQt5 import QtWidgets
 
-from anamdesktop import SETTINGS
 from anamdesktop.network import do_get
 from anamdesktop.utils import isototext
-from anamdesktop.ui.common import ErrorLabel
 from anamdesktop.ui.table import QTable, QCellItem
 from anamdesktop.ui.dialog import ActionDialogButton
 
@@ -31,7 +29,7 @@ class ArchiveToggleButton(QtWidgets.QPushButton):
         self.setText("désarchiver" if self.archived else "archiver")
 
     def on_click(self):
-        mainw = self.parent().parent().parent().parent()
+        mainw = self.parent().parent().parent()
         action = mainw.unarchive if self.archived else mainw.archive
 
         try:
