@@ -36,7 +36,7 @@ def ora_test(address=None, username=None, password=None, service=None):
         return True
 
     # check that server is reachable and open
-    if not test_socket(address, ORACLE_PORT):
+    if not test_socket(address or SETTINGS.get('db_serverip'), ORACLE_PORT):
         return False
 
     # check that we can actually connect to it
