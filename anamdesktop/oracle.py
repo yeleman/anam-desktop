@@ -17,16 +17,18 @@ def ora_disconnect(conn):
 
 def ora_connect(address=None, username=None, password=None, service=None):
     ''' prepare and return a working Oracle connection based on params '''
+
     return cx_Oracle.connect(
         '{username}/{password}@{address}/{service}'
-        .format(username=SETTINGS.get('db_username'),
-                password=SETTINGS.get('db_password'),
+        .format(username=username or SETTINGS.get('db_username'),
+                password=password or SETTINGS.get('db_password'),
                 address=address or SETTINGS.get('db_serverip'),
-                service=SETTINGS.get('db_sid')))
+                service=service or SETTINGS.get('db_sid')))
 
 
 def ora_test(address=None, username=None, password=None, service=None):
     ''' tests oracle credentials by connecting to it '''
+
     def test_conn():
         conn = ora_connect(address=address, username=username,
                            password=password, service=service)

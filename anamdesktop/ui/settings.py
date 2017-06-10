@@ -107,17 +107,7 @@ class OracleChecker(SettingsGroupChecker):
     ''' tests whether the oracle DB is available for connection '''
 
     def do_check(self):
-        def test_conn():
-            conn = ora_connect(
-                address=self.getfield('db_serverip').text(),
-                username=self.getfield('db_username').text(),
-                password=self.getfield('db_password').text(),
-                service=self.getfield('db_sid').text())
-            conn.close()
-            return True
-        if not test_socket(address=self.getfield('db_serverip').text(),
-                           port=ORACLE_PORT):
-            return False
+        logger.debug("do_check")
         try:
             assert ora_test(address=self.getfield('db_serverip').text(),
                             username=self.getfield('db_username').text(),
@@ -197,9 +187,9 @@ class SettingsDialog(QtWidgets.QDialog):
         self.store_layout.addRow("URL", self.store_url)
         self.store_layout.addRow("Token", self.store_token)
 
-        self.oracle_checker = WebAPIChecker(
+        self.store_checker = WebAPIChecker(
             dialog=self, fields=['store_url', 'store_token'])
-        self.store_layout.addRow(*self.oracle_checker.for_row())
+        self.store_layout.addRow(*self.store_checker.for_row())
         self.store.setLayout(self.store_layout)
 
         # save/cancel buttons
