@@ -17,6 +17,7 @@ class UploadDialog(CollectActionDialog):
 
     TITLE = "Transmission manuelle"
     DOWNLOAD_DATASET = False
+    SIZE = (350, 200)
 
     def __init__(self, dataset, *args, **kwargs):
         self.fpath = kwargs.pop('fpath') if 'fpath' in kwargs else None
