@@ -2,7 +2,7 @@
 SetCompressor /FINAL zlib
 
 Name "ANAM Desktop Installer"
-OutFile "ANAM Desktop Installer.exe"
+OutFile "ANAM Desktop Installer-{VERSION}.exe"
 ;InstallDir "$PROGRAMFILES64\ANAM Desktop"	
 InstallDir "C:\ANAM Desktop"	
 ; Request application privileges for Windows Vista
@@ -52,6 +52,8 @@ Section "Uninstall"
   RMDir /r $INSTDIR\img
   Delete "$INSTDIR\vc_redist.x64-2015.exe"
   RMDir /r $INSTDIR\oraclient_win64
+  Delete $INSTDIR\anam-desktop.log
+  Delete $INSTDIR\erreurs-copie.log
   RMDir $INSTDIR
 
   Delete "$SMPROGRAMS\ANAM Desktop\ANAM Desktop.lnk"
