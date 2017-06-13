@@ -180,7 +180,7 @@ class SettingsDialog(QtWidgets.QDialog):
         self.oracle.setLayout(self.oracle_layout)
 
         # anam-receiver
-        self.store = QtWidgets.QGroupBox("Server RAMED/ANAM (anam-receiver)")
+        self.store = QtWidgets.QGroupBox("Serveur ANAM-receiver")
         self.store_layout = FormLayout(self.store)
         self.store_url = SettingLineEdit('store_url')
         self.store_token = SettingLineEdit('store_token')
