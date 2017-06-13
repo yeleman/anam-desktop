@@ -26,6 +26,7 @@ Section "" ;No components page, name is not important
   
   File /oname=$exename "dist\ANAM Desktop.exe"
   File "anam-desktop.settings"
+  File "Aide ANAM Desktop.pdf"
 
   CreateDirectory "$INSTDIR\img"
   File /oname=img\anam-desktop.png img\anam-desktop.png
@@ -54,6 +55,7 @@ Section "Uninstall"
   RMDir /r $INSTDIR\oraclient_win64
   Delete $INSTDIR\anam-desktop.log
   Delete $INSTDIR\erreurs-copie.log
+  Delete "Aide ANAM Desktop.pdf"
   RMDir $INSTDIR
 
   Delete "$SMPROGRAMS\ANAM Desktop\ANAM Desktop.lnk"

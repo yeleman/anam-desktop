@@ -8,14 +8,15 @@ import logging
 import platform
 import logging.config
 
-LOG_FILE = 'anam-desktop.log'
-IS_MAC = platform.system() == 'Darwin'
 UI_SIZE = (900, 600)
+LOG_FILE = 'anam-desktop.log'
+HELP_FILE = "Aide ANAM Desktop.pdf"
+IS_MAC = platform.system() == 'Darwin'
 SETTINGS_FILE = "anam-desktop.settings"
 
 VERSION = (1, 0)
-APP_NAME = "ANAM Desktop"
 DEVELOPER = "yɛlɛman"
+APP_NAME = "ANAM Desktop"
 
 logging.config.dictConfig({
     'version': 1,

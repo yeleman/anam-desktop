@@ -14,9 +14,10 @@ from anamdesktop.ui.home import HomeWidget
 from anamdesktop.ui.upload import UploadDialog
 from anamdesktop.ui.dbimport import ImportDialog
 from anamdesktop.ui.settings import SettingsDialog
-from anamdesktop.utils import open_log, get_version
+from anamdesktop.utils import open_file, get_version
 from anamdesktop.ui.pictures import ImagesCopyDialog
-from anamdesktop import logger, UI_SIZE, IS_MAC, LOG_FILE, APP_NAME, DEVELOPER
+from anamdesktop import (logger, UI_SIZE, IS_MAC,
+                         LOG_FILE, HELP_FILE, APP_NAME, DEVELOPER)
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -83,7 +84,11 @@ class MainWindow(QtWidgets.QMainWindow):
             "About" if IS_MAC else "À propos", self)
         about_action.setShortcut('Ctrl+H')
         about_action.triggered.connect(self.showAbout)
+        open_help_action = QtWidgets.QAction("Guide utilisateur", self)
+        open_help_action.setShortcut('F1')
+        open_help_action.triggered.connect(self.openHelpFile)
         help_menu.addAction(about_action)
+        help_menu.addAction(open_help_action)
 
         self.setMenuBar(menubar)
         self.setMenuWidget(menubar)
@@ -167,10 +172,15 @@ class MainWindow(QtWidgets.QMainWindow):
             logger.info("Closing Upload Dialog for {}".format(upload_fpath))
             self.reset()
 
+    def openHelpFile(self):
+        ''' opens help file in external reader '''
+        logger.info("Opening help file for display")
+        open_file(HELP_FILE)
+
     def openLogFile(self):
         ''' opens log file in external reader '''
         logger.info("Opening log file for display")
-        open_log(LOG_FILE)
+        open_file(LOG_FILE)
 
     def exportLogFile(self):
         ''' displays a filesave dialog to copy log file to '''

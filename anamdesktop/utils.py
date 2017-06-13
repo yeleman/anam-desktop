@@ -50,8 +50,8 @@ def get_folder_name(identifier, last_name, first_name):
         first=first_name.strip().title()))
 
 
-def open_log(fpath):
-    ''' open external log file for display in third-party app '''
+def open_file(fpath):
+    ''' open external file for usage in third-party app '''
     if IS_MAC:
         subprocess.call(['open', fpath])
     else:

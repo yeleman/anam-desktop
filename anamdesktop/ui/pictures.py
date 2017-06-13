@@ -13,7 +13,7 @@ from anamdesktop.network import do_post
 from anamdesktop.ui.dialog import CollectActionDialog
 from anamdesktop.samba import copy_files, test_connection
 from anamdesktop.utils import (
-    get_folder_name, VALID_ATTACHMENTS, isototext, open_log)
+    get_folder_name, VALID_ATTACHMENTS, isototext, open_file)
 
 import smb
 
@@ -96,7 +96,7 @@ class ImagesCopyDialog(CollectActionDialog):
 
     def open_user_log(self):
         ''' opens the images-copy-error log file in external reader '''
-        open_log(self.error_log_fname)
+        open_file(self.error_log_fname)
 
     def get_action_btn_label(self):
         return "Copier {} images sur le partage".format(self.nb_images)
