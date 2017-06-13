@@ -14,7 +14,7 @@ HELP_FILE = "Aide ANAM Desktop.pdf"
 IS_MAC = platform.system() == 'Darwin'
 SETTINGS_FILE = "anam-desktop.settings"
 
-VERSION = (1, 0)
+VERSION = (1, 1)
 DEVELOPER = "yɛlɛman"
 APP_NAME = "ANAM Desktop"
 
@@ -81,7 +81,7 @@ def read_settings(filename):
         'db_password': None,
         'db_sid': None,
 
-        'store_url': "http://192.168.1.10",
+        'store_url': "http://192.168.1.10:8080",
         'store_token': None,
     }
     try:
