@@ -11,10 +11,26 @@ from anamdesktop.locations import (get_asserted_commune_id,
                                    get_cercle_id, get_region_id)
 
 
+def request_perso_id(conn):
+    stmt = ("SELECT ANAM.SQ_PERSONNES.NEXTVAL INTO :gen_perso_id FROM DUAL")
+
+    cursor = conn.cursor()
+    gen_perso_id = None
+    try:
+        cursor.execute(stmt)
+        gen_perso_id = cursor.fetchone()[-1]
+    except:
+        raise
+    finally:
+        cursor.close()
+
+    return gen_perso_id
+
+
 def create_hh_member(conn, dos_id, member_data, target, ind_id=None):
-    ''' insert an IM_PERSONNES_mobile into ANAM DB '''
-    stmt = ("INSERT INTO ANAM.IM_PERSONNES_mobile ("
-            "OGD_ID, DOS_ID,"
+    ''' insert an IM_PERSONNES_MOBILE into ANAM DB '''
+    stmt = ("INSERT INTO IM_PERSONNES_MOBILE ("
+            "PERSO_ID, OGD_ID, DOS_ID,"
             "PERSO_CIVILITE, PERSO_NOM, PERSO_PRENOM, PERSO_SEXE, "
             "PERSO_DATE_NAISSANCE, PERSO_LOCALITE_NAISSANCE, "
             "PERSO_SIT_MAT, PERSO_NATIONALITE, PERSO_PAYS_NAISSANCE, "
@@ -27,7 +43,7 @@ def create_hh_member(conn, dos_id, member_data, target, ind_id=None):
             "PERSO_SAISIE_PAR, PERSO_SAISIE_DATE, "
             "PERSO_PERSO_ID, PERSO_ETAT_IMMATRICULATION "
             ") VALUES ("
-            ":ogd_id, :dos_id,"
+            ":perso_id, :ogd_id, :dos_id,"
             ":perso_civilite, :perso_nom, :perso_prenom, :perso_sexe, "
             ":perso_date_naissance, :perso_localite_naissance, "
             ":perso_sit_mat, :perso_nationalite, :perso_pays_naissance, "
@@ -38,8 +54,9 @@ def create_hh_member(conn, dos_id, member_data, target, ind_id=None):
             ":perso_etat_validation, "
             ":perso_prenom_pere, :perso_prenom_mere, "
             ":perso_saisie_par, :perso_saisie_date, "
-            ":perso_perso_id, :perso_etat_immatriculation) "
-            "returning PERSO_ID into :perso_id")
+            ":perso_perso_id, :perso_etat_immatriculation)")
+
+    perso_id = request_perso_id(conn)
 
     now = datetime.datetime.now()
     type_perso = "IND" if member_data['relation'] != 'A' else ""
@@ -47,6 +64,7 @@ def create_hh_member(conn, dos_id, member_data, target, ind_id=None):
     nationalite = "MALIENNE" if pays_naissance == "MLI" else "INCONNUE"
 
     payload = {
+        'perso_id': perso_id,
         'ogd_id': 40,
         'dos_id': dos_id,
         'perso_civilite': member_data['civilite'],
@@ -77,12 +95,8 @@ def create_hh_member(conn, dos_id, member_data, target, ind_id=None):
     }
 
     cursor = conn.cursor()
-    perso_id = None
-    perso_id_var = cursor.var(cx_Oracle.NUMBER)
-    payload.update({'perso_id': perso_id_var})
     try:
         cursor.execute(stmt, payload)
-        perso_id = int(perso_id_var.getvalue())
     except:
         raise
     finally:

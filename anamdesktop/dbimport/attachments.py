@@ -8,9 +8,9 @@ from anamdesktop.dbimport import mx, to_date
 
 
 def create_attachment(conn, dos_id, perso_id, pj_data, member, member_type):
-    ''' insert an IM_PERSO_PJ_mobile into ANAM DB '''
+    ''' insert an IM_PERSO_PJ_MOBILE into ANAM DB '''
 
-    stmt = ("INSERT INTO ANAM.IM_PERSO_PJ_mobile ("
+    stmt = ("INSERT INTO IM_PERSO_PJ_MOBILE ("
             "PERSO_ID, PJ_ID, PPJ_DATE_DEB, DOS_ID, "
             "PPJ_NUM_PIECE, PPJ_DELIVRE_PAR, "
             "PPJ_VALIDITE, PPJ_DATE_FIN) VALUES ("

@@ -53,7 +53,7 @@ def import_target(conn, target):
         ''' create all attachments for a specified person '''
         for ix, attachment in enumerate(get_attachments(target, mtype, index)):
             create_attachment(conn, dos_id, pid, attachment, member, mtype)
-            logger.info("Created IM_PERSO_PJ_mobile {} for {}"
+            logger.info("Created IM_PERSO_PJ_MOBILE {} for {}"
                         .format(ix, mtype))
 
     # retrieve identifier as we'll use it to bind with dossier_id
@@ -66,11 +66,11 @@ def import_target(conn, target):
     # create DOSSIER
     dos_id = create_dossier(conn, ident, target)
 
-    logger.info("Created IM_DOSSIERS_mobile #{}".format(dos_id))
+    logger.info("Created IM_DOSSIERS_MOBILE #{}".format(dos_id))
 
     # create indigent first
     pid = create_hh_member(conn, dos_id, get_indigent_data(target), target)
-    logger.info("Created IM_PERSONNES_mobile (indigent) #{}".format(pid))
+    logger.info("Created IM_PERSONNES_MOBILE (indigent) #{}".format(pid))
 
     # record perso_id
     ident_map = {'indigent': pid,
@@ -84,7 +84,7 @@ def import_target(conn, target):
         pid = create_hh_member(
             conn, dos_id, get_spouse_data(pid, target, index),
             target, ind_id=pid)
-        logger.info("Created IM_PERSONNES_mobile (spouse {}) #{}"
+        logger.info("Created IM_PERSONNES_MOBILE (spouse {}) #{}"
                     .format(index, pid))
 
         ident_map.update({'epouse{}'.format(index + 1): pid})
@@ -95,7 +95,7 @@ def import_target(conn, target):
         pid = create_hh_member(
             conn, dos_id, get_child_data(pid, target, index),
             target, ind_id=pid)
-        logger.info("Created IM_PERSONNES_mobile (child {}) #{}"
+        logger.info("Created IM_PERSONNES_MOBILE (child {}) #{}"
                     .format(index, pid))
 
         ident_map.update({'enfant{}'.format(index + 1): pid})

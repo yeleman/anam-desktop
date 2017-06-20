@@ -45,12 +45,12 @@ class ImportDialog(CollectActionDialog):
             - connect to database
             - loop on all targets ; for each
             - create a DOSSIER for the indigent/household
-            - create a IM_PERSONNES_mobile for the indigent
-            - create many IM_PERSO_PJ_mobile for the indigent
-            - create zero-plus IM_PERSONNES_mobile for the indigent spouses
-            - create many IM_PERSO_PJ_mobile for the indigent spouses
-            - create zero-plus IM_PERSONNES_mobile for the indigent children
-            - create many IM_PERSO_PJ_mobile for the indigent children
+            - create a IM_PERSONNES_MOBILE for the indigent
+            - create many IM_PERSO_PJ_MOBILE for the indigent
+            - create zero-plus IM_PERSONNES_MOBILE for the indigent spouses
+            - create many IM_PERSO_PJ_MOBILE for the indigent spouses
+            - create zero-plus IM_PERSONNES_MOBILE for the indigent children
+            - create many IM_PERSO_PJ_MOBILE for the indigent children
             - POST to anam-receiver to mark collect imported
 
             rollback if any of this failed '''
