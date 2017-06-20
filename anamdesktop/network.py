@@ -99,7 +99,7 @@ def test_url_socket(url=None):
         return False
 
     # check if address and port are reachable
-    return test_socket(u.hostname, u.port)
+    return test_socket(u.hostname, u.port or 80)
 
 
 def test_webservice(url=None, token=None):
