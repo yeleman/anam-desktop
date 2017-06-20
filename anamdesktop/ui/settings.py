@@ -94,6 +94,7 @@ class SambaChecker(SettingsGroupChecker):
                 address=self.getfield('picserv_ip').text(),
                 username=self.getfield('picserv_username').text(),
                 password=self.getfield('picserv_password').text(),
+                server_name=self.getfield('picserv_name').text(),
                 service_name=self.getfield('picserv_share').text())
         except Exception as e:
             logger.debug("Unable to connect to samba share.")
@@ -147,10 +148,12 @@ class SettingsDialog(QtWidgets.QDialog):
         self.picserv = QtWidgets.QGroupBox("Dossier partagé des photos")
         self.picserv_layout = FormLayout(self.picserv)
         self.picserv_ip = SettingLineEdit('picserv_ip')
+        self.picserv_name = SettingLineEdit('picserv_name')
         self.picserv_username = SettingLineEdit('picserv_username')
         self.picserv_password = SettingLineEdit('picserv_password')
         self.picserv_share = SettingLineEdit('picserv_share')
         self.picserv_layout.addRow("Adresse IP", self.picserv_ip)
+        self.picserv_layout.addRow("Nom du serveur", self.picserv_name)
         self.picserv_layout.addRow("Identifiant", self.picserv_username)
         self.picserv_layout.addRow("Mot de passe", self.picserv_password)
         self.picserv_layout.addRow("Nom du partage", self.picserv_share)

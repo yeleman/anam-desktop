@@ -74,12 +74,13 @@ def read_settings(filename):
         'picserv_ip': "192.168.1.10",
         'picserv_username': None,
         'picserv_password': None,
-        'picserv_share': None,
+        'picserv_share': "partage_images",
+        'picserv_name': "SERVEUR_APPL",
 
         'db_serverip': "192.168.1.11",
-        'db_username': None,
+        'db_username': "anam_mobile",
         'db_password': None,
-        'db_sid': None,
+        'db_sid': "sianambd.anam.lan",
 
         'store_url': "http://192.168.1.10:8080",
         'store_token': None,

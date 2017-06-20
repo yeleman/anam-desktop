@@ -19,7 +19,7 @@ class FailedToCreateTree(Exception):
     pass
 
 
-def smb_connect(address=None, username=None, password=None):
+def smb_connect(address=None, username=None, password=None, server_name=None):
     ''' prepare and return a valid SMB Connection object
 
         Uses global settings for unspecified parameters '''
@@ -27,7 +27,8 @@ def smb_connect(address=None, username=None, password=None):
     conn = SMBConnection(username=username or SETTINGS.get('picserv_username'),
                          password=password or SETTINGS.get('picserv_password'),
                          my_name="ANAM-DESKTOP",
-                         remote_name="")
+                         remote_name=server_name or
+                         SETTINGS.get('picserv_name'))
     assert conn.connect(address or SETTINGS.get('picserv_ip'), 139)
     return conn
 
@@ -127,12 +128,13 @@ def copy_files(files, service_name=None, conn=None):
 
 
 def test_connection(address=None, username=None, password=None,
-                    service_name=None):
+                    server_name=None, service_name=None):
     ''' test whether an SMB share is writable '''
 
     address = address or SETTINGS.get('picserv_ip')
     username = username or SETTINGS.get('picserv_username')
     password = password or SETTINGS.get('picserv_password')
+    server_name = server_name or SETTINGS.get('picserv_name')
     service_name = service_name or SETTINGS.get('picserv_share')
 
     # test whether server is reachable and has a samba service
@@ -141,7 +143,8 @@ def test_connection(address=None, username=None, password=None,
 
     try:
         conn = smb_connect(address=address,
-                           username=username, password=password)
+                           username=username, password=password,
+                           server_name=server_name)
     except:
         return False
 
