@@ -14,8 +14,8 @@ ANAMDB_SHORTDATE_FMT = "%d%m%Y"
 
 def mx(text, length):
     ''' return `text` truncated to `length` '''
-    if len(str(text)) > length - 1:
-        return str(text)[:length - 1]
+    if len(str(text)) > length:
+        return str(text)[:length]
     return text
 
 
@@ -34,6 +34,11 @@ def to_date(data):
         return datetime.date(*[int(i) for i in data.split("-")])
     except:
         return None
+
+
+def nname(name):
+    ''' normalize name (uppercase) '''
+    return name.upper()
 
 
 def import_target(conn, target):

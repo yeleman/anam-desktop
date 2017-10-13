@@ -5,7 +5,7 @@
 import datetime
 
 from anamdesktop.locations import get_asserted_commune_id
-from anamdesktop.dbimport import cl, mx, ANAMDB_USER_ID
+from anamdesktop.dbimport import cl, mx, nname, ANAMDB_USER_ID
 
 
 def request_dos_id(conn):
@@ -67,8 +67,8 @@ def create_dossier(conn, ident, target):
         'dos_imputation': "PRIM",
         'loc_code': int(location_id),
         'dos_certif_ind': mx(certif_ind, 120),
-        'dos_perso_nom': mx(last_name, 60),
-        'dos_perso_prenom': mx(first_name, 60),
+        'dos_perso_nom': mx(nname(last_name), 60),
+        'dos_perso_prenom': mx(nname(first_name), 60),
         'dos_type_saisie': "N",
         'opv_code': 1,
     }
