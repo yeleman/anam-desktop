@@ -14,7 +14,7 @@ HELP_FILE = "Aide ANAM Desktop.pdf"
 IS_MAC = platform.system() == 'Darwin'
 SETTINGS_FILE = "anam-desktop.settings"
 
-VERSION = (1, 2)
+VERSION = (1, 3)
 DEVELOPER = "yɛlɛman"
 APP_NAME = "ANAM Desktop"
 
