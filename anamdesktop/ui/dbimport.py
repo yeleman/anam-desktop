@@ -66,6 +66,7 @@ class ImportDialog(CollectActionDialog):
 
         # will hold reference to both json IDs and oracle DB IDs
         mapping = {}
+        nb_imported = 0
         for index, target in enumerate(self.get_indigents()):
             # retrieve name to update progress bar
             first_name = target.get("enquete/prenoms")
@@ -88,6 +89,40 @@ class ImportDialog(CollectActionDialog):
                 ora_disconnect(conn)
                 return
 
+            # commit if every 1,000 indigents
+            if index % 1000 == 0:
+                try:
+                    conn.commit()
+                    nb_imported += 1000
+                except Exception as exp:
+                    logger.exception(exp)
+                    self.status_bar.set_error(
+                        "Impossible d'importer certaines données "
+                        "(ORACLE/COMMIT/THOUSANDS).\n"
+                        "ATTENTION: {nb} indigents ont été importés dans "
+                        "la base de données Oracle !!".format(nb=nb_imported))
+                    conn.rollback()
+                    return
+                finally:
+                    ora_disconnect(conn)
+
+        # commit remaining batch of statements
+        try:
+            conn.commit()
+            nb_imported = self.nb_indigents
+        except Exception as exp:
+            logger.exception(exp)
+            self.status_bar.set_error(
+                "Impossible d'importer les données (ORACLE/COMMIT/END).\n"
+                "ATTENTION: {nb} indigents ont été importés dans "
+                "la base de données Oracle !!".format(nb=nb_imported))
+            conn.rollback()
+            return
+        else:
+            self.status_bar.set_success("Données Oracle importées.")
+        finally:
+            ora_disconnect(conn)
+
         # update progress UI as we're done
         self.progress_bar.setValue(self.progress_bar.maximum())
         self.status_bar.setText("Finalisation…")
@@ -100,24 +135,8 @@ class ImportDialog(CollectActionDialog):
             logger.exception(exp)
             self.status_bar.set_error(
                 "Impossible mettre à jour le service web ANAM.\n"
-                "Les données n'ont pas été importées.")
-            # rollback if we could not mark imported to prevent double imports
-            conn.rollback()
-            ora_disconnect(conn)
+                "ATTENTION: {nb} indigents ont été importés dans la base "
+                "de données Oracle !!".format(nb=nb_imported))
             return
-
-        # collect has been marked imported on anam-receiver, let's commit it
-        try:
-            conn.commit()
-        except Exception as exp:
-            logger.exception(exp)
-            self.status_bar.set_error(
-                "Impossible d'importer les données (ORACLE/COMMIT).\n"
-                "Les données n'ont pas été importées.")
-            conn.rollback()
-            # TODO: unmark as imported on anam-receiver
         else:
             self.status_bar.set_success("Import terminé avec success.")
-
-        finally:
-            ora_disconnect(conn)
