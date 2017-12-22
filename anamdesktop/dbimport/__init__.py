@@ -14,12 +14,14 @@ ANAMDB_SHORTDATE_FMT = "%d%m%Y"
 
 def mx(text, length):
     ''' return `text` truncated to `length` '''
+    if isinstance(text, str):
+        text = cl(text, True)
     if len(str(text)) > length:
         return str(text)[:length]
     return text
 
 
-def cl(s, ascii_only=False):
+def cl(s, ascii_only=True):
     ''' normalize input to a strip'd version '''
     if s is None:
         return None
@@ -38,7 +40,7 @@ def to_date(data):
 
 def nname(name):
     ''' normalize name (uppercase) '''
-    return name.upper()
+    return cl(name, True).upper()
 
 
 def import_target(conn, target):

@@ -62,7 +62,7 @@ def do_request(path, method, kwargs={}, or_none=False,
     req = None
     try:
         req = getattr(requests, method.lower())(
-            url, headers=get_auth_headers(server_token), timeout=3, **kwargs)
+            url, headers=get_auth_headers(server_token), timeout=30, **kwargs)
         assert req.status_code in (200, 201)
         resp = req.json()
         assert resp['status'] == 'success'
