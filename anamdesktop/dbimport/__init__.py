@@ -40,6 +40,8 @@ def to_date(data):
 
 def nname(name):
     ''' normalize name (uppercase) '''
+    if name is None:
+        name = "INCONNU"
     return cl(name, True).upper()
 
 

@@ -84,7 +84,8 @@ class ImportDialog(CollectActionDialog):
                 logger.exception(exp)
                 self.status_bar.set_error(
                     "Impossible d'importer les données (ORACLE).\n"
-                    "Les données n'ont pas été importées.")
+                    "Les données n'ont pas été importées.\n{exp}"
+                    .format(exp=exp))
                 conn.rollback()
                 ora_disconnect(conn)
                 return
@@ -100,11 +101,11 @@ class ImportDialog(CollectActionDialog):
                         "Impossible d'importer certaines données "
                         "(ORACLE/COMMIT/THOUSANDS).\n"
                         "ATTENTION: {nb} indigents ont été importés dans "
-                        "la base de données Oracle !!".format(nb=nb_imported))
+                        "la base de données Oracle !!\n{exp}"
+                        .format(nb=nb_imported, exp=exp))
                     conn.rollback()
-                    return
-                finally:
                     ora_disconnect(conn)
+                    return
 
         # commit remaining batch of statements
         try:
@@ -115,7 +116,8 @@ class ImportDialog(CollectActionDialog):
             self.status_bar.set_error(
                 "Impossible d'importer les données (ORACLE/COMMIT/END).\n"
                 "ATTENTION: {nb} indigents ont été importés dans "
-                "la base de données Oracle !!".format(nb=nb_imported))
+                "la base de données Oracle !!\n{exp}"
+                .format(nb=nb_imported, exp=exp))
             conn.rollback()
             return
         else:
@@ -136,7 +138,7 @@ class ImportDialog(CollectActionDialog):
             self.status_bar.set_error(
                 "Impossible mettre à jour le service web ANAM.\n"
                 "ATTENTION: {nb} indigents ont été importés dans la base "
-                "de données Oracle !!".format(nb=nb_imported))
+                "de données Oracle !!\n{exp}".format(nb=nb_imported, exp=exp))
             return
         else:
             self.status_bar.set_success("Import terminé avec success.")
