@@ -78,6 +78,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.toggle_archived_action.setCheckable(True)
         view_menu.addAction(self.toggle_archived_action)
 
+        self.toggle_imagesimport_action = QtWidgets.QAction(
+            "Activer import d'images pour tous", self)
+        self.toggle_imagesimport_action.setShortcut('Ctrl+I')
+        self.toggle_imagesimport_action.toggled.connect(
+            self.toggle_images_import)
+        self.toggle_imagesimport_action.setCheckable(True)
+        view_menu.addAction(self.toggle_imagesimport_action)
+
         # Help Menu (only win)
         help_menu = menubar.addMenu("&Aide")
         about_action = QtWidgets.QAction(
@@ -197,7 +205,16 @@ class MainWindow(QtWidgets.QMainWindow):
         ''' shortcut to actual display status of archives '''
         return self.toggle_archived_action.isChecked()
 
+    @property
+    def allow_imagesimport(self):
+        ''' shortcut to actual display status of archives '''
+        return self.toggle_imagesimport_action.isChecked()
+
     def toggle_archives_visibility(self, checked):
+        ''' refreshes home page's content on toggle '''
+        self.reset()
+
+    def toggle_images_import(self, checked):
         ''' refreshes home page's content on toggle '''
         self.reset()
 

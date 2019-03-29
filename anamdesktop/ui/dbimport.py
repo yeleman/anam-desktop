@@ -17,26 +17,26 @@ class ImportDialog(CollectActionDialog):
     TITLE = "Importer dans la BDD ANAM"
 
     def get_action_btn_label(self):
-        return "importer {} indigents".format(self.nb_indigents)
+        return "importer {} cibles".format(self.nb_targets)
 
     def get_progress_maximum(self):
-        return self.nb_indigents
+        return self.nb_targets
 
     @property
     def can_be_actioned(self):
-        return self.nb_indigents > 0
+        return self.nb_targets > 0  # now importing all targets
 
     def get_fields(self):
-        nb_indigents_str = "{nbi} ({nbih}H / {nbif}F)".format(
-            nbi=self.nb_indigents,
-            nbih=self.nb_indigents_male,
-            nbif=self.nb_indigents_female)
+        nb_targets_str = "{nbi} ({nbih}H / {nbif}F)".format(
+            nbi=self.nb_targets,
+            nbih=self.nb_targets_male,
+            nbif=self.nb_targets_female)
         return [
             ("Cercle", self.dataset.get('cercle', NA)),
             ("Commune", self.dataset.get('commune', NA)),
             ("Reçu le", isototext(self.dataset.get('started_on'))),
             ("Nb. Soumissions", str(self.nb_submissions)),
-            ("Nb. indigents", nb_indigents_str),
+            ("Nb. cibles", nb_targets_str),
         ]
 
     def worker(self):
@@ -110,7 +110,7 @@ class ImportDialog(CollectActionDialog):
         # commit remaining batch of statements
         try:
             conn.commit()
-            nb_imported = self.nb_indigents
+            nb_imported = self.nb_targets
         except Exception as exp:
             logger.exception(exp)
             self.status_bar.set_error(

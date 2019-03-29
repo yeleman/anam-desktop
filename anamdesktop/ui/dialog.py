@@ -6,6 +6,7 @@ import threading
 
 from PyQt5 import QtWidgets, QtCore
 
+from anamdesktop import logger
 from anamdesktop.network import do_get
 from anamdesktop.ui.common import DialogTitle, StatusLabel
 
@@ -34,6 +35,22 @@ class CollectDialogInterface(object):
         return len(self.get_targets())
 
     @property
+    def nb_targets_male(self):
+        if self.nb_targets == 0:
+            return 0
+        return sum([1
+                    for target in self.get_targets()
+                    if target.get("enquete/sexe") == "masculin"])
+
+    @property
+    def nb_targets_female(self):
+        if self.nb_targets == 0:
+            return 0
+        return sum([1
+                    for target in self.get_targets()
+                    if target.get("enquete/sexe") == "feminin"])
+
+    @property
     def name(self):
         return ("Enquête sociale de {commune}, cercle de {cercle}"
                 .format(commune=self.dataset.get('commune'),
@@ -42,8 +59,8 @@ class CollectDialogInterface(object):
     def get_indigents(self):
         return [target
                 for target in self.dataset.get('dataset', {})
-                                          .get('targets', [])
-                if target.get('certificat-indigence')]
+                                          .get('targets', [])]
+        #       if target.get('certificat-indigence')]
 
     @property
     def nb_indigents(self):
@@ -104,8 +121,10 @@ class CollectActionDialog(QtWidgets.QDialog, CollectDialogInterface):
 
     def download_dataset(self, collect_id):
         self.collect_id = collect_id
+        logger.info("Downloading dataset for #{}".format(collect_id))
         self.dataset = (do_get('/collects/{}'.format(self.collect_id)) or {}) \
             .get('collect')
+        logger.info("Dataset #{} download complete.".format(collect_id))
 
     def get_title(self):
         ''' override with yout dialog's title '''

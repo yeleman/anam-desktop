@@ -70,7 +70,8 @@ def import_target(conn, target):
     assert ident
 
     # ensure target is indigent
-    assert target.get('certificat-indigence')
+    # not anymore. ability to import all entries.
+    # assert target.get('certificat-indigence')
 
     # create DOSSIER
     dos_id = create_dossier(conn, ident, target)

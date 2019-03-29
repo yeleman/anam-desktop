@@ -77,6 +77,11 @@ class HomeWidget(QtWidgets.QWidget):
         ''' shortcut to MainWindow's display_archived boolean '''
         return self.parent().display_archived
 
+    @property
+    def allow_imagesimport(self):
+        ''' shortcut to MainWindow's allow_imagesimport boolean '''
+        return self.parent().allow_imagesimport
+
     def get_collects(self, failsafe=True):
         ''' filtered (archive-wise) list of retrieved collects '''
         if self.collects is None:
@@ -149,8 +154,9 @@ class HomeWidget(QtWidgets.QWidget):
                                              "copier images")
 
             # collect must have been imported to allow images copy
-            copy_button.setDisabled(
-                not collect.get('can_be_copied', False))
+            if not self.allow_imagesimport:
+                copy_button.setDisabled(
+                    not collect.get('can_be_copied', False))
 
             # just visualy highlight that it's already been copied (redoable)
             if collect.get('images_copied'):
