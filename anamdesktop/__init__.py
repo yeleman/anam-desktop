@@ -88,7 +88,7 @@ def read_settings(filename):
     try:
         with open(filename, 'r') as f:
             file_data = json.load(f)
-    except:
+    except Exception:
         pass
     else:
         settings.update(file_data)
@@ -105,5 +105,6 @@ def save_settings(filename, settings):
         logger.error("Unable to save settings to file `{}`".format(filename))
         logger.exception(exp)
         return False
+
 
 SETTINGS = read_settings(SETTINGS_FILE)

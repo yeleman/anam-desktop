@@ -34,7 +34,7 @@ def to_date(data):
     ''' convert xform YYYY-MM-DD dates to datetime object '''
     try:
         return datetime.date(*[int(i) for i in data.split("-")])
-    except:
+    except Exception:
         return None
 
 
@@ -67,7 +67,9 @@ def import_target(conn, target):
 
     # retrieve identifier as we'll use it to bind with dossier_id
     ident = target.get('ident')
-    assert ident
+    logger.info("Importing target: {}".format(ident))
+    if not ident:
+        raise ValueError("Unable to import target without an ident.")
 
     # ensure target is indigent
     # not anymore. ability to import all entries.

@@ -67,6 +67,7 @@ class ImportDialog(CollectActionDialog):
         # will hold reference to both json IDs and oracle DB IDs
         mapping = {}
         nb_imported = 0
+        self.progress_bar.setValue(self.progress_bar.maximum() // 2)
         for index, target in enumerate(self.get_indigents()):
             # retrieve name to update progress bar
             first_name = target.get("enquete/prenoms")
@@ -75,12 +76,13 @@ class ImportDialog(CollectActionDialog):
                 last=last_name.upper(),
                 firsts=first_name.title())
             self.status_bar.setText(name)
-            self.progress_bar.setValue(index + 1)
+            # self.progress_bar.setValue(index + 1)
 
             try:
                 # import_target returns a DOS_ID: dict() of all mappings
                 mapping.update(import_target(conn, target))
             except Exception as exp:
+                logger.error("DB import error on #{}: {}".format(index, name))
                 logger.exception(exp)
                 self.status_bar.set_error(
                     "Impossible d'importer les données (ORACLE).\n"
@@ -91,11 +93,12 @@ class ImportDialog(CollectActionDialog):
                 return
 
             # commit if every 1,000 indigents
-            if index % 1000 == 0:
+            if index % 50 == 0:
                 try:
                     conn.commit()
-                    nb_imported += 1000
+                    nb_imported += 50
                 except Exception as exp:
+                    logger.error("DB Commit error on #{}: {}".format(index, name))
                     logger.exception(exp)
                     self.status_bar.set_error(
                         "Impossible d'importer certaines données "
@@ -112,6 +115,7 @@ class ImportDialog(CollectActionDialog):
             conn.commit()
             nb_imported = self.nb_targets
         except Exception as exp:
+            logger.error("DB Commit error on last batch: {}".format(name))
             logger.exception(exp)
             self.status_bar.set_error(
                 "Impossible d'importer les données (ORACLE/COMMIT/END).\n"

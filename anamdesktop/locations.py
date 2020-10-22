@@ -825,5 +825,8 @@ def get_asserted_commune_id(commune_slug, cercle_slug):
         commune_id is verified to be within given cercle '''
     cercle_id = get_cercle_id(cercle_slug)
     commune_id = get_commune_id(commune_slug)
-    assert commune_id.startswith(cercle_id)
+    if not commune_id.startswith(cercle_id):
+        raise ValueError(
+            "CommuneID `{}`/{} doesnt start with Cercle ID `{}`/{}"
+            .format(commune_id, commune_slug, cercle_id, cercle_slug))
     return commune_id

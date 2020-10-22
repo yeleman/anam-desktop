@@ -36,7 +36,7 @@ class ArchiveToggleButton(QtWidgets.QPushButton):
             action(self.collect_id)
             self.archived = not self.archived
             self.update_text()
-        except:
+        except Exception:
             pass
 
 

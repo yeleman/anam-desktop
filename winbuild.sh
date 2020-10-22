@@ -4,7 +4,7 @@
 if [ "a$1" = "a" ] ;
 	then
 	echo "you must specify path to virtualenv"
-	exit 1	
+	exit 1
 else
 	venv=$1
 fi
